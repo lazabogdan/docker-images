@@ -1,0 +1,31 @@
+server {
+    client_max_body_size 20M;
+    listen 80 default_server;
+
+    root /data/www/public;
+    index index.php index.html index.htm;
+
+    rewrite_log on;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { log_not_found off; access_log off; }
+    location = /robots.txt  { log_not_found off; access_log off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_intercept_errors on;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass phpfpm_backend;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+    	deny all;
+    }
+}
