@@ -2,8 +2,6 @@ FROM debian:jessie
 
 MAINTAINER "Laza Bogdan" <laza.bogdan@macro-net.ro>
 
-RUN apt-get update -y
-
 # we'll need wget to fetch the key...
 RUN apt-get update -y && \
     apt-get install -y wget

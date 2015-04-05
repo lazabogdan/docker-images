@@ -1,12 +1,13 @@
 DOCKER=docker
 BUILDFLAGS=--rm
 
-.PHONY: all php-all web-all tools-all hhvm nginx composer
+.PHONY: all php web tools db hhvm nginx composer artisan data mariadb
 
-all:		php-all web-all tools-all
-php-all:	hhvm
-web-all:	nginx
-tools-all:	composer
+all:	php web tools db data
+php:	hhvm
+web:	nginx
+tools:	composer artisan
+db:     mariadb
 
 hhvm:	
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-php-hhvm images/php/hhvm
@@ -16,3 +17,12 @@ nginx:
 
 composer:	
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-tools-composer images/tools/composer
+
+artisan:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-tools-artisan images/tools/artisan
+
+data:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-data images/data
+
+mariadb:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-db-mariadb images/db/mariadb

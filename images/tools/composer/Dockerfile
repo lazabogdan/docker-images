@@ -26,7 +26,7 @@ RUN php --version
 RUN composer --version
 
 # Set up the application directory.
-RUN mkdir -p /data
+RUN mkdir -p /data/www
 VOLUME ["/data"]
 WORKDIR /data/www
 
