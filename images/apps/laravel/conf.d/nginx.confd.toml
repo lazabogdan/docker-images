@@ -1,0 +1,13 @@
+[template]
+prefix = "/nginx"
+src   = "nginx.conf"
+dest  = "/etc/nginx/nginx.conf"
+uid = 0
+gid = 0
+mode  = "0644"
+keys = [
+  "/fastcgi/addr",
+  "/fastcgi/port"
+]
+check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
+reload_cmd = "/usr/local/bin/supervisorctl restart nginx"

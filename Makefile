@@ -1,7 +1,7 @@
 DOCKER=docker
 BUILDFLAGS=--rm
 
-.PHONY: all php web tools db hhvm nginx composer artisan data mariadb
+.PHONY: all php web tools db hhvm nginx composer artisan data mariadb mesos-dns laravel
 
 all:	php web tools db data
 php:	hhvm
@@ -26,3 +26,9 @@ data:
 
 mariadb:
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-db-mariadb images/db/mariadb
+
+mesos-dns:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/docker-mesos-dns images/mesos-dns
+
+laravel:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/laravel images/apps/laravel
