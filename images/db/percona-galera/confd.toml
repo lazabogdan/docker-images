@@ -1,0 +1,4 @@
+[confd]
+confdir  = "/app"
+interval = 5
+quiet    = false

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+E_NOARGS=85
+if [ -z "$1" ]
+then
+	echo "Usage: `basename $0` /path/to/command"
+    exit $E_NOARGS
+fi
+
+printf "\nprefix = \"${CONFD_PREFIX}\"" >> /app/confd.toml
+
+$1

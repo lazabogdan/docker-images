@@ -1,0 +1,16 @@
+[Unit]
+Description=Data for MySQL Database Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/docker pull busybox
+ExecStart=/bin/sh -c "docker inspect %p-%i >/dev/null 2>&1 || docker run --name %p-%i -v /var/lib/mysql busybox true"
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Conflicts=%p@%i.service

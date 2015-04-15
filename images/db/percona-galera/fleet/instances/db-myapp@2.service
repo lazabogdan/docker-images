@@ -1,0 +1,34 @@
+[Unit]
+Description=MySQL Database Service
+Requires=docker.service %p-data@%i.service
+After=docker.service %p-data@%i.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=20m
+Restart=always
+RestartSec=5
+ExecStartPre=-/usr/bin/docker rm -f %p-%i
+ExecStartPre=/usr/bin/docker pull lazabogdan/percona-galera:latest
+ExecStart=/bin/sh -c "/usr/bin/docker run \
+    --name %p-%i \
+    --rm \
+    -p 3306:3306 \
+    -p 4444:4444 \
+    -p 4567:4567 \
+    -p 4568:4568 \
+    -e PUBLISH=3306 \
+    -e HOST=$COREOS_PRIVATE_IPV4 \
+    -e CONFD_PREFIX=/%p \
+    -e ETCD_PATH=/%p/database \
+    -e CLUSTER=%p \
+    --volumes-from %p-data-%i \
+    lazabogdan/percona-galera:latest"
+ExecStop=/usr/bin/docker stop %p-%i
+ExecStopPost=-/usr/bin/docker rm -f %p-%i
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+MachineOf=%p-data@%i.service

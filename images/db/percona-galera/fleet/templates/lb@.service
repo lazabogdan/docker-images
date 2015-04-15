@@ -1,0 +1,28 @@
+[Unit]
+Description=Load Balancer for MySQL Database Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=0
+Restart=always
+RestartSec=10
+ExecStartPre=-/usr/bin/docker rm -f %p-%i
+ExecStartPre=/usr/bin/docker pull lazabogdan/percona-galera:latest
+ExecStart=/bin/sh -c "/usr/bin/docker run \
+    --name %p-%i \
+    --rm \
+    -p 3307:3307 \
+    -p 8888:8080 \
+    -e PUBLISH=3307 \
+    -e HOST=$COREOS_PRIVATE_IPV4 \
+    -e CONFD_PREFIX=$(echo \"/%p\" | sed \"s/-lb//g\") \
+    -e ETCD_PATH=$(echo \"/%p/database\" | sed \"s/-lb//g\") \
+    lazabogdan/percona-galera:latest \
+    /app/boot /app/bin/loadbalancer"
+ExecStop=/usr/bin/docker stop %p-%i
+ExecStopPost=-/usr/bin/docker rm -f %p-%i
+
+[Install]
+WantedBy=multi-user.target
