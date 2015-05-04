@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /app/www
+
+    <Directory /app/www>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /app/logs/error.log
+    CustomLog /app/logs/access.log combined
+</VirtualHost>

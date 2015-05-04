@@ -4,7 +4,7 @@ BUILDFLAGS=--rm
 .PHONY: all php web tools db apps
 all:	php web tools db apps data
 php:	hhvm
-web:	nginx nginx-npm nginx-grunt-bower nginx-gulp-bower
+web:	nginx nginx-supervisord nginx-fastcgi nginx-hhvm nginx-npm nginx-grunt-bower nginx-gulp-bower apache-php
 tools:	composer artisan
 db:     mariadb percona-galera
 apps:   laravel
@@ -17,6 +17,18 @@ hhvm:
 nginx:	
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx images/web/nginx
 
+.PHONY: nginx-supervisord
+nginx-supervisord:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-supervisord images/web/nginx-supervisord
+
+.PHONY: nginx-fastcgi
+nginx-fastcgi:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-fastcgi images/web/nginx-fastcgi
+
+.PHONY: nginx-hhvm
+nginx-hhvm:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-hhvm images/web/nginx-hhvm
+
 .PHONY: nginx-npm
 nginx-npm:
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-npm images/web/nginx-npm
@@ -28,6 +40,10 @@ nginx-grunt-bower:
 .PHONY: nginx-gulp-bower
 nginx-gulp-bower:
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-gulp-bower images/web/nginx-gulp-bower
+
+.PHONY: apache-php
+nginx:
+		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/apache-php images/web/apache-php
 
 .PHONY: composer
 composer:	
