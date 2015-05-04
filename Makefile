@@ -42,7 +42,7 @@ nginx-gulp-bower:
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/nginx-gulp-bower images/web/nginx-gulp-bower
 
 .PHONY: apache-php
-nginx:
+apache-php:
 		${DOCKER} build ${BUILDFLAGS} -t lazabogdan/apache-php images/web/apache-php
 
 .PHONY: composer
